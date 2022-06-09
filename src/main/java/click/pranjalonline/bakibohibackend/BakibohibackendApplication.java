@@ -1,8 +1,6 @@
 package click.pranjalonline.bakibohibackend;
-
+import org.modelmapper.ModelMapper;
 import click.pranjalonline.bakibohibackend.main.utils.FileUploadService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +13,10 @@ import javax.annotation.Resource;
 public class BakibohibackendApplication {
 	@Resource
 	FileUploadService filesUploadService;
+	@Bean
+	public ModelMapper modelMapper(){
+		return new ModelMapper();
+	}
 	@Bean
 	PasswordEncoder passwordEncoder(){ return new BCryptPasswordEncoder();};
 	public static void main(String[] args) {

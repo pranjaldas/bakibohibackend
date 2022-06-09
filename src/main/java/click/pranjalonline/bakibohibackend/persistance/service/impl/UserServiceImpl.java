@@ -23,4 +23,13 @@ public class UserServiceImpl implements UserService {
     public boolean existsByUsername(String username) {
         return false;
     }
+
+    @Override
+    public User findById(Long id) {
+        Optional<User> optionalUser= repository.findById(id);
+        if(optionalUser.isPresent())
+            return optionalUser.get();
+        else
+            return null;
+    }
 }

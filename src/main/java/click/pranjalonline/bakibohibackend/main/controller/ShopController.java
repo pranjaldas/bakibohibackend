@@ -4,16 +4,20 @@ import click.pranjalonline.bakibohibackend.main.payload.ShopPayload;
 import click.pranjalonline.bakibohibackend.main.payload.ShopResponse;
 import click.pranjalonline.bakibohibackend.main.utils.FileUploadService;
 import click.pranjalonline.bakibohibackend.persistance.entity.Shop;
+import click.pranjalonline.bakibohibackend.persistance.entity.User;
 import click.pranjalonline.bakibohibackend.persistance.service.ShopService;
+import click.pranjalonline.bakibohibackend.persistance.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,6 +26,10 @@ import java.util.stream.Collectors;
 public class ShopController {
     @Autowired
     ShopService shopService;
+    @Autowired
+    UserService userService;
+    @Autowired
+    ModelMapper modelMapper;
     @Autowired
     FileUploadService fileUploadService;
     private final Logger LOGGER= LogManager.getLogger(ShopService.class);
@@ -44,14 +52,27 @@ public class ShopController {
             consumes = {MediaType.MULTIPART_FORM_DATA_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> createShop(ShopPayload shopPayload){
+
         LOGGER.info(shopPayload.getPhoto().getName());
+        String fileName= new StringBuilder()
+                .append("my_file_")
+                .append(System.currentTimeMillis())
+                .append(".jpg").toString();
+        LOGGER.info(fileName);
         try {
-            fileUploadService.save(shopPayload.getPhoto(),"my_file.jpg");
+            fileUploadService.save(shopPayload.getPhoto(),fileName);
+            Shop shop= modelMapper.map(shopPayload,Shop.class);
+            shop.setImage_path(fileName);
+            shop.setShopkeeper(userService.findById(1L));
+            shopService.createShop(shop);
+            return ResponseEntity.ok(shopPayload.toString());
+
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
 
-        return ResponseEntity.ok(shopPayload.toString());
+
     }
 
 }
