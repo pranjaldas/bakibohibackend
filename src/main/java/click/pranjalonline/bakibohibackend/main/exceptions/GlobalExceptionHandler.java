@@ -16,6 +16,13 @@ import java.util.HashMap;
 import java.util.Map;
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorDetails> resourceNotFoundExceptionHandler(
+            ResourceNotFoundException exception, WebRequest webRequest){
+        ErrorDetails<String> errorDetails= new ErrorDetails(new Date(), HttpStatus.BAD_REQUEST.toString(),
+                exception.getMessage(),webRequest.getDescription(false));
+        return new ResponseEntity<>(errorDetails,HttpStatus.BAD_REQUEST);
+    }
     // FOR CLIENT INPUT VALIDATION
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,

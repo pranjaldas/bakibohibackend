@@ -1,5 +1,6 @@
 package click.pranjalonline.bakibohibackend.main.controller;
 
+import click.pranjalonline.bakibohibackend.main.exceptions.ResourceNotFoundException;
 import click.pranjalonline.bakibohibackend.main.payload.ErrorDetails;
 import click.pranjalonline.bakibohibackend.main.payload.ShopPayload;
 import click.pranjalonline.bakibohibackend.main.payload.ShopResponse;
@@ -27,7 +28,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/v1/shops/")
+@RequestMapping("/api/v1/shops")
 public class ShopController {
     @Autowired
     ShopService shopService;
@@ -40,21 +41,25 @@ public class ShopController {
     @Autowired
     MyFileValidator myFileValidator;
     private final Logger LOGGER= LogManager.getLogger(ShopService.class);
-    @GetMapping
+    // FOR ADMINS USE ONLY HAVE TO CHECK FOR USER ROLE LATER
+    @GetMapping(value = "/all")
     public ResponseEntity<List<ShopResponse>> getShops(){
-        List<Shop> shops= shopService.findAllShops();
-        List<ShopResponse> resposeShops= shops.stream().map(shop->new ShopResponse(shop))
+        List<Shop> shops= shopService.findByShopkeeperId(1);
+        List<ShopResponse> shopResponses=shops.stream()
+                .map((shop -> modelMapper.map(shop,ShopResponse.class)))
                 .collect(Collectors.toList());
-        resposeShops.stream().forEach(i->System.out.println(i.getAddress()));
+        return ResponseEntity.ok(shopResponses);
+    }
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<ShopResponse> getMyShops(@PathVariable long id){
+        Shop shop= shopService.findById(id);
+        if(shop != null)
+            return ResponseEntity.ok(modelMapper.map(shop, ShopResponse.class));
+        else
+            throw new ResourceNotFoundException("Shop not found",HttpStatus.NOT_FOUND);
+    }
 
-        return ResponseEntity.ok(resposeShops);
-    }
-    @GetMapping("/get")
-    public ResponseEntity<List<Shop>> getShopsNew(){
-        List<Shop> shops= shopService.findAllShops();
-        LOGGER.error("hii");
-        return ResponseEntity.ok(shops);
-    }
+
     @PostMapping(value= "/create")
     public ResponseEntity<String> createShop(@Valid @RequestBody ShopPayload shopPayload,BindingResult bindingResult){
         String fileName= new StringBuilder()
@@ -67,11 +72,6 @@ public class ShopController {
             e.printStackTrace();
         }
 
-
-//        Shop shop= modelMapper.map(shopPayload,Shop.class);
-//        shop.setImage_path(fileName);
-//        shop.setShopkeeper(userService.findById(1L));
-//        shopService.createShop(shop);
         return new ResponseEntity<>("CREATED", HttpStatus.CREATED);
 
 
@@ -109,12 +109,12 @@ public class ShopController {
         }else{
             LOGGER.info("NO ERROR OCCURRED");
         }
-
-
-
-
         return "path";
     }
+
+
+
+
 
 
 }

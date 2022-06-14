@@ -1,5 +1,6 @@
 package click.pranjalonline.bakibohibackend.persistance.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -21,6 +22,7 @@ public class User {
     private long id;
     private String name;
     private String email;
+    @JsonIgnore //THIS ANNOTATION HELP TO NOT TO FETCH PASSWORD, STOP DESERIALIZING PASSWORD TO OBJECT ATTRIBUTE
     private String password;
     private String username;
     @ManyToMany(fetch = FetchType.EAGER)

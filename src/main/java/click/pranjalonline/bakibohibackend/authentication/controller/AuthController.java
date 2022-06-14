@@ -2,6 +2,7 @@ package click.pranjalonline.bakibohibackend.authentication.controller;
 
 import click.pranjalonline.bakibohibackend.authentication.payload.LoginDto;
 import click.pranjalonline.bakibohibackend.authentication.security.JwtTokenProvider;
+import click.pranjalonline.bakibohibackend.persistance.entity.Shop;
 import click.pranjalonline.bakibohibackend.persistance.entity.User;
 import click.pranjalonline.bakibohibackend.persistance.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,8 +44,9 @@ public class AuthController {
         return ResponseEntity.ok(token);
 
     }
-    @GetMapping("/encode")
-    public String encode(){
-        return passwordEncoder.encode("password");
+    @GetMapping(value = "/test")
+    public ResponseEntity<User> test(){
+        User user= userService.findById(1L);
+        return  ResponseEntity.ok(user);
     }
 }
