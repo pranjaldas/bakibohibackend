@@ -1,13 +1,12 @@
 package click.pranjalonline.bakibohibackend.authentication.security;
 
-import click.pranjalonline.bakibohibackend.authentication.exceptions.AuthExceptions;
+import click.pranjalonline.bakibohibackend.exceptions.AuthExceptions;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-import javax.security.auth.message.AuthException;
 import java.util.Date;
 @Component
 public class JwtTokenProvider {

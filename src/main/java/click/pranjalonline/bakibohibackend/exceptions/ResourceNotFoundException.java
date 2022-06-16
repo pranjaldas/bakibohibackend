@@ -1,4 +1,4 @@
-package click.pranjalonline.bakibohibackend.main.exceptions;
+package click.pranjalonline.bakibohibackend.exceptions;
 
 import lombok.*;
 import org.springframework.http.HttpStatus;

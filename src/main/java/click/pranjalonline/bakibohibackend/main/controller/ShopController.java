@@ -1,6 +1,6 @@
 package click.pranjalonline.bakibohibackend.main.controller;
 
-import click.pranjalonline.bakibohibackend.main.exceptions.ResourceNotFoundException;
+import click.pranjalonline.bakibohibackend.exceptions.ResourceNotFoundException;
 import click.pranjalonline.bakibohibackend.main.payload.ErrorDetails;
 import click.pranjalonline.bakibohibackend.main.payload.ShopPayload;
 import click.pranjalonline.bakibohibackend.main.payload.ShopResponse;
@@ -24,7 +24,6 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
