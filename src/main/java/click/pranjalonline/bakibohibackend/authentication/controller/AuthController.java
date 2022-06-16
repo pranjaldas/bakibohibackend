@@ -38,6 +38,6 @@ public class AuthController {
     }
     @PutMapping("/update/{id}")
     public ResponseEntity<String> updateUser(@RequestBody UserPayload userPayload, @PathVariable(name="id") long id){
-        return null;
+        return ResponseEntity.ok("UPDATED SUCCESFULLY");
     }
 }
