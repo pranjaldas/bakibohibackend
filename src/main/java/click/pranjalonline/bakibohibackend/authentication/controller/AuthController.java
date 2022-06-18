@@ -40,4 +40,5 @@ public class AuthController {
     public ResponseEntity<String> updateUser(@RequestBody UserPayload userPayload, @PathVariable(name="id") long id){
         return ResponseEntity.ok("UPDATED SUCCESFULLY");
     }
+
 }
